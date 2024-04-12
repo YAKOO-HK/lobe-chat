@@ -4,7 +4,8 @@ import { getServerConfig } from '@/config/server';
 
 import { ssoProviders } from './sso-providers';
 
-const { NEXTAUTH_SECRET, ENABLE_OAUTH_SSO, SSO_PROVIDERS } = getServerConfig();
+const { NEXTAUTH_SECRET, ENABLE_OAUTH_SSO, SSO_PROVIDERS, GOOGLE_EMAIL_DOMAIN_ALLOWED } =
+  getServerConfig();
 
 export const initSSOProviders = () => {
   return ENABLE_OAUTH_SSO
@@ -35,6 +36,14 @@ const nextAuth = NextAuth({
         session.user.id = token.userId ?? session.user.id;
       }
       return session;
+    },
+    async signIn({ account, profile }) {
+      if (account?.provider === 'google') {
+        return Boolean(
+          profile?.email_verified && profile?.email?.endsWith(GOOGLE_EMAIL_DOMAIN_ALLOWED),
+        );
+      }
+      return true; // Do different verification for other providers that don't have `email_verified`
     },
   },
   providers: initSSOProviders(),
