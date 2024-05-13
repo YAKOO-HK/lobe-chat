@@ -1,15 +1,12 @@
 import NextAuth from 'next-auth';
 
-import { getServerConfig } from '@/config/server';
+import { authEnv } from '@/config/auth';
 
 import { ssoProviders } from './sso-providers';
 
-const { NEXTAUTH_SECRET, ENABLE_OAUTH_SSO, SSO_PROVIDERS, GOOGLE_EMAIL_DOMAIN_ALLOWED } =
-  getServerConfig();
-
 export const initSSOProviders = () => {
-  return ENABLE_OAUTH_SSO
-    ? SSO_PROVIDERS.split(/[,，]/).map((provider) => {
+  return authEnv.NEXT_PUBLIC_ENABLE_NEXT_AUTH
+    ? authEnv.NEXT_AUTH_SSO_PROVIDERS.split(/[,，]/).map((provider) => {
         const validProvider = ssoProviders.find((item) => item.id === provider);
 
         if (validProvider) return validProvider.provider;
@@ -40,14 +37,14 @@ const nextAuth = NextAuth({
     async signIn({ account, profile }) {
       if (account?.provider === 'google') {
         return Boolean(
-          profile?.email_verified && profile?.email?.endsWith(GOOGLE_EMAIL_DOMAIN_ALLOWED),
+          profile?.email_verified && profile?.email?.endsWith(authEnv.GOOGLE_EMAIL_DOMAIN_ALLOWED),
         );
       }
       return true; // Do different verification for other providers that don't have `email_verified`
     },
   },
   providers: initSSOProviders(),
-  secret: NEXTAUTH_SECRET,
+  secret: authEnv.NEXT_AUTH_SECRET,
   trustHost: true,
 });
 
