@@ -10,9 +10,8 @@ import * as debugStreamModule from '../utils/debugStream';
 import { LobeGoogleAI } from './index';
 
 const provider = 'google';
-const defaultBaseURL = 'https://api.moonshot.cn/v1';
-const bizErrorType = 'GoogleBizError';
-const invalidErrorType = 'InvalidGoogleAPIKey';
+const bizErrorType = 'ProviderBizError';
+const invalidErrorType = 'InvalidProviderAPIKey';
 
 // Mock the console.error to avoid polluting test output
 vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -291,7 +290,7 @@ describe('LobeGoogleAI', () => {
           });
         } catch (e) {
           expect(e).toEqual({
-            errorType: 'GoogleBizError',
+            errorType: bizErrorType,
             provider,
             error: {
               message: 'Generic Error',
@@ -560,12 +559,31 @@ describe('LobeGoogleAI', () => {
         });
       });
 
-      it('should correctly convert message with content parts', () => {
+      it('should correctly convert message with inline base64 image parts', () => {
         const message: OpenAIChatMessage = {
           role: 'user',
           content: [
             { type: 'text', text: 'Check this image:' },
             { type: 'image_url', image_url: { url: 'data:image/png;base64,...' } },
+          ],
+        };
+
+        const converted = instance['convertOAIMessagesToGoogleMessage'](message);
+
+        expect(converted).toEqual({
+          role: 'user',
+          parts: [
+            { text: 'Check this image:' },
+            { inlineData: { data: '...', mimeType: 'image/png' } },
+          ],
+        });
+      });
+      it.skip('should correctly convert message with image url parts', () => {
+        const message: OpenAIChatMessage = {
+          role: 'user',
+          content: [
+            { type: 'text', text: 'Check this image:' },
+            { type: 'image_url', image_url: { url: 'https://image-file.com' } },
           ],
         };
 

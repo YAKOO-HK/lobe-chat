@@ -17,13 +17,15 @@ describe('featureFlagsSelectors', () => {
     const result = featureFlagsSelectors(store.getState());
 
     expect(result).toEqual({
-      enableWebrtc: true,
+      enableWebrtc: false,
       isAgentEditable: false,
       showCreateSession: true,
       showDalle: true,
       showLLM: false,
       showOpenAIApiKey: true,
       showOpenAIProxyUrl: true,
+      enableCheckUpdates: true,
+      showWelcomeSuggest: true,
     });
   });
 });

@@ -2,6 +2,14 @@
   "about": {
     "title": "Over"
   },
+  "agentTab": {
+    "chat": "Chatvoorkeur",
+    "meta": "Assistentinformatie",
+    "modal": "Modelinstellingen",
+    "plugin": "Plugin-instellingen",
+    "prompt": "Rolinstelling",
+    "tts": "Tekst-naar-spraakdienst"
+  },
   "analytics": {
     "telemetry": {
       "desc": "Door te kiezen om telemetrische gegevens te verzenden, kun je ons helpen om de algehele gebruikerservaring van LobeChat te verbeteren",
@@ -35,6 +43,12 @@
     "title": "Instellingen"
   },
   "llm": {
+    "aesGcm": "Uw sleutel en proxy-adres zullen worden versleuteld met het <1>AES-GCM</1> encryptie-algoritme",
+    "apiKey": {
+      "desc": "Vul je {{name}} API-sleutel in",
+      "placeholder": "{{name}} API-sleutel",
+      "title": "API-sleutel"
+    },
     "checker": {
       "button": "Controleren",
       "desc": "Test of de API-sleutel en proxyadres correct zijn ingevuld",
@@ -89,6 +103,7 @@
       "latestTime": "Laatst bijgewerkt: {{time}}",
       "noLatestTime": "Geen lijst beschikbaar op dit moment"
     },
+    "helpDoc": "configuratiehandleiding",
     "modelList": {
       "desc": "Selecteer het model dat in de sessie moet worden weergegeven. Het geselecteerde model wordt weergegeven in de modellijst.",
       "placeholder": "Selecteer een model uit de lijst",
@@ -99,15 +114,7 @@
       "desc": "Moet http(s):// bevatten, naast het standaardadres",
       "title": "API Proxy Adres"
     },
-    "waitingForMore": "Meer modellen worden <1>gepland om te worden toegevoegd</1>, dus blijf op de hoogte ✨"
-  },
-  "ollama": {
-    "download": {
-      "desc": "Ollama is bezig met het downloaden van dit model. Gelieve deze pagina niet te sluiten. Het downloaden zal worden hervat vanaf het onderbroken punt als u opnieuw begint te downloaden.",
-      "remainingTime": "Resterende tijd",
-      "speed": "Downloadsnelheid",
-      "title": "Model {{model}} wordt gedownload"
-    }
+    "waitingForMore": "Meer modellen worden <1>gepland om te worden toegevoegd</1>, dus blijf op de hoogte"
   },
   "plugin": {
     "addTooltip": "Voeg aangepaste plug-in toe",
@@ -174,6 +181,7 @@
     "enableHistoryCount": {
       "alias": "Onbeperkt",
       "limited": "Bevat alleen {{number}} berichten",
+      "setlimited": "Stel berichtengeschiedenis in",
       "title": "Berichtgeschiedenis beperken",
       "unlimited": "Onbeperkt aantal berichten in de geschiedenis"
     },
@@ -359,6 +367,24 @@
       "title": "WebRTC Synchronisatie"
     }
   },
+  "systemAgent": {
+    "agentMeta": {
+      "label": "Assistentmetadata-generatiemodel",
+      "modelDesc": "Model voor het genereren van assistentnaam, beschrijving, profielfoto en labels",
+      "title": "Automatisch assistentinformatie genereren"
+    },
+    "title": "Systeemassistent",
+    "topic": {
+      "label": "Onderwerp Naamgevingsmodel",
+      "modelDesc": "Specificeer het model dat wordt gebruikt voor automatische hernoeming van onderwerpen",
+      "title": "Automatische Onderwerpnaamgeving"
+    },
+    "translation": {
+      "label": "Vertaalmodel",
+      "modelDesc": "Specificeer het model voor vertaling",
+      "title": "Instellingen voor vertaalassistent"
+    }
+  },
   "tab": {
     "about": "Over",
     "agent": "Standaardassistent",
@@ -366,6 +392,7 @@
     "experiment": "Experiment",
     "llm": "Taalmodel",
     "sync": "Cloudsynchronisatie",
+    "system-agent": "Systeemassistent",
     "tts": "Spraakdienst"
   },
   "tools": {

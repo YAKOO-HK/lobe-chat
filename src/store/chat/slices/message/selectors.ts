@@ -4,6 +4,7 @@ import { DEFAULT_INBOX_AVATAR, DEFAULT_USER_AVATAR } from '@/const/meta';
 import { INBOX_SESSION_ID } from '@/const/session';
 import { useAgentStore } from '@/store/agent';
 import { agentSelectors } from '@/store/agent/selectors';
+import { messageMapKey } from '@/store/chat/slices/message/utils';
 import { useSessionStore } from '@/store/session';
 import { sessionMetaSelectors } from '@/store/session/selectors';
 import { useUserStore } from '@/store/user';
@@ -33,13 +34,15 @@ const getMeta = (message: ChatMessage) => {
   }
 };
 
-const currentChatKey = (s: ChatStore) => `${s.activeId}_${s.activeTopicId}`;
+const currentChatKey = (s: ChatStore) => messageMapKey(s.activeId, s.activeTopicId);
 
 // 当前激活的消息列表
 const currentChats = (s: ChatStore): ChatMessage[] => {
   if (!s.activeId) return [];
 
-  return s.messages.map((i) => ({ ...i, meta: getMeta(i) }));
+  const messages = s.messagesMap[currentChatKey(s)] || [];
+
+  return messages.map((i) => ({ ...i, meta: getMeta(i) }));
 };
 
 const initTime = Date.now();
@@ -47,8 +50,10 @@ const initTime = Date.now();
 const showInboxWelcome = (s: ChatStore): boolean => {
   const isInbox = s.activeId === INBOX_SESSION_ID;
   if (!isInbox) return false;
+
   const data = currentChats(s);
   const isBrandNewChat = data.length === 0;
+
   return isBrandNewChat;
 };
 
@@ -97,7 +102,7 @@ const currentChatIDsWithGuideMessage = (s: ChatStore) => {
 
 const currentChatsWithHistoryConfig = (s: ChatStore): ChatMessage[] => {
   const chats = currentChats(s);
-  const config = agentSelectors.currentAgentConfig(useAgentStore.getState());
+  const config = agentSelectors.currentAgentChatConfig(useAgentStore.getState());
 
   return chatHelpers.getSlicedMessagesWithConfig(chats, config);
 };
@@ -107,16 +112,25 @@ const chatsMessageString = (s: ChatStore): string => {
   return chats.map((m) => m.content).join('');
 };
 
-const getMessageById = (id: string) => (s: ChatStore) => chatHelpers.getMessageById(s.messages, id);
+const getMessageById = (id: string) => (s: ChatStore) =>
+  chatHelpers.getMessageById(currentChats(s), id);
+
 const getTraceIdByMessageId = (id: string) => (s: ChatStore) => getMessageById(id)(s)?.traceId;
 
 const latestMessage = (s: ChatStore) => currentChats(s).at(-1);
 
 const currentChatLoadingState = (s: ChatStore) => !s.messagesInit;
 
+const isCurrentChatLoaded = (s: ChatStore) => !!s.messagesMap[currentChatKey(s)];
+
 const isMessageEditing = (id: string) => (s: ChatStore) => s.messageEditingIds.includes(id);
 const isMessageLoading = (id: string) => (s: ChatStore) => s.messageLoadingIds.includes(id);
+const isHasMessageLoading = (s: ChatStore) => s.messageLoadingIds.length > 0;
+const isCreatingMessage = (s: ChatStore) => s.isCreatingMessage;
+
 const isMessageGenerating = (id: string) => (s: ChatStore) => s.chatLoadingIds.includes(id);
+const isPluginApiInvoking = (id: string) => (s: ChatStore) => s.pluginApiLoadingIds.includes(id);
+
 const isToolCallStreaming = (id: string, index: number) => (s: ChatStore) => {
   const isLoading = s.toolCallingStreamIds[id];
 
@@ -137,9 +151,13 @@ export const chatSelectors = {
   getMessageById,
   getTraceIdByMessageId,
   isAIGenerating,
+  isCreatingMessage,
+  isCurrentChatLoaded,
+  isHasMessageLoading,
   isMessageEditing,
   isMessageGenerating,
   isMessageLoading,
+  isPluginApiInvoking,
   isToolCallStreaming,
   latestMessage,
   showInboxWelcome,

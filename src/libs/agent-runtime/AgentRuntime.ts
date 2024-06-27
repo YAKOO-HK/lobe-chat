@@ -6,6 +6,7 @@ import { LobeRuntimeAI } from './BaseAI';
 import { LobeAnthropicAI } from './anthropic';
 import { LobeAzureOpenAI } from './azureOpenai';
 import { LobeBedrockAI, LobeBedrockAIParams } from './bedrock';
+import { LobeDeepSeekAI } from './deepseek';
 import { LobeGoogleAI } from './google';
 import { LobeGroq } from './groq';
 import { LobeMinimaxAI } from './minimax';
@@ -15,6 +16,8 @@ import { LobeOllamaAI } from './ollama';
 import { LobeOpenAI } from './openai';
 import { LobeOpenRouterAI } from './openrouter';
 import { LobePerplexityAI } from './perplexity';
+import { LobeQwenAI } from './qwen';
+import { LobeStepfunAI } from './stepfun';
 import { LobeTogetherAI } from './togetherai';
 import {
   ChatCompetitionOptions,
@@ -101,6 +104,7 @@ class AgentRuntime {
       anthropic: Partial<ClientOptions>;
       azure: { apiVersion?: string; apikey?: string; endpoint?: string };
       bedrock: Partial<LobeBedrockAIParams>;
+      deepseek: Partial<ClientOptions>;
       google: { apiKey?: string; baseURL?: string };
       groq: Partial<ClientOptions>;
       minimax: Partial<ClientOptions>;
@@ -110,6 +114,8 @@ class AgentRuntime {
       openai: Partial<ClientOptions>;
       openrouter: Partial<ClientOptions>;
       perplexity: Partial<ClientOptions>;
+      qwen: Partial<ClientOptions>;
+      stepfun: Partial<ClientOptions>;
       togetherai: Partial<ClientOptions>;
       zeroone: Partial<ClientOptions>;
       zhipu: Partial<ClientOptions>;
@@ -169,6 +175,11 @@ class AgentRuntime {
         break;
       }
 
+      case ModelProvider.DeepSeek: {
+        runtimeModel = new LobeDeepSeekAI(params.deepseek ?? {});
+        break;
+      }
+
       case ModelProvider.Minimax: {
         runtimeModel = new LobeMinimaxAI(params.minimax ?? {});
         break;
@@ -196,6 +207,16 @@ class AgentRuntime {
 
       case ModelProvider.ZeroOne: {
         runtimeModel = new LobeZeroOneAI(params.zeroone ?? {});
+        break;
+      }
+
+      case ModelProvider.Qwen: {
+        runtimeModel = new LobeQwenAI(params.qwen ?? {});
+        break;
+      }
+
+      case ModelProvider.Stepfun: {
+        runtimeModel = new LobeStepfunAI(params.stepfun ?? {});
         break;
       }
     }

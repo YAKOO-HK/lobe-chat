@@ -129,4 +129,10 @@ ENV TOGETHERAI_API_KEY ""
 # Minimax
 ENV MINIMAX_API_KEY ""
 
+# DeepSeek
+ENV DEEPSEEK_API_KEY ""
+
+# Qwen
+ENV QWEN_API_KEY ""
+
 CMD ["node", "server.js"]
