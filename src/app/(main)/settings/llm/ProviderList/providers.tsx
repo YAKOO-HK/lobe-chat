@@ -1,5 +1,7 @@
 import {
+  AiMass,
   Anthropic,
+  Baichuan,
   Claude,
   DeepSeek,
   Gemini,
@@ -24,6 +26,7 @@ import urlJoin from 'url-join';
 
 import {
   AnthropicProviderCard,
+  BaichuanProviderCard,
   DeepSeekProviderCard,
   GoogleProviderCard,
   GroqProviderCard,
@@ -34,6 +37,7 @@ import {
   PerplexityProviderCard,
   QwenProviderCard,
   StepfunProviderCard,
+  TaichuProviderCard,
   TogetherAIProviderCard,
   ZeroOneProviderCard,
   ZhiPuProviderCard,
@@ -169,6 +173,16 @@ export const useProviderList = (): ProviderItem[] => {
         ...StepfunProviderCard,
         docUrl: urlJoin(BASE_DOC_URL, 'stepfun'),
         title: <Stepfun.Combine size={20} type={'color'} />,
+      },
+      {
+        ...BaichuanProviderCard,
+        docUrl: urlJoin(BASE_DOC_URL, 'baichuan'),
+        title: <Baichuan.Combine size={ 20 } type={ 'color' } />,
+      },
+      {
+        ...TaichuProviderCard,
+        docUrl: urlJoin(BASE_DOC_URL, 'taichu'),
+        title: <AiMass.Combine size={ 28 } type={ 'color' } />,
       },
     ],
     [azureProvider, ollamaProvider, ollamaProvider, bedrockProvider],

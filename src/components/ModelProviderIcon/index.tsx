@@ -1,6 +1,8 @@
 import {
+  AiMass,
   Anthropic,
   Azure,
+  Baichuan,
   Bedrock,
   DeepSeek,
   Google,
@@ -112,6 +114,14 @@ const ModelProviderIcon = memo<ModelProviderIconProps>(({ provider }) => {
 
     case ModelProvider.Stepfun: {
       return <Stepfun size={20} />;
+    }
+
+    case ModelProvider.Baichuan: {
+      return <Baichuan size={20} />;
+    }
+
+    case ModelProvider.Taichu: {
+      return <AiMass size={20} />;
     }
 
     default: {

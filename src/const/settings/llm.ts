@@ -1,5 +1,6 @@
 import {
   AnthropicProviderCard,
+  BaichuanProviderCard,
   BedrockProviderCard,
   DeepSeekProviderCard,
   GoogleProviderCard,
@@ -13,6 +14,7 @@ import {
   PerplexityProviderCard,
   QwenProviderCard,
   StepfunProviderCard,
+  TaichuProviderCard,
   TogetherAIProviderCard,
   ZeroOneProviderCard,
   ZhiPuProviderCard,
@@ -28,6 +30,10 @@ export const DEFAULT_LLM_CONFIG: UserModelProviderConfig = {
   },
   azure: {
     enabled: false,
+  },
+  baichuan: {
+    enabled: false,
+    enabledModels: filterEnabledModels(BaichuanProviderCard),
   },
   bedrock: {
     enabled: false,
@@ -81,6 +87,10 @@ export const DEFAULT_LLM_CONFIG: UserModelProviderConfig = {
   stepfun: {
     enabled: false,
     enabledModels: filterEnabledModels(StepfunProviderCard),
+  },
+  taichu: {
+    enabled: false,
+    enabledModels: filterEnabledModels(TaichuProviderCard),
   },
   togetherai: {
     enabled: false,
