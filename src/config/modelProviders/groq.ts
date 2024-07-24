@@ -4,8 +4,21 @@ import { ModelProviderCard } from '@/types/llm';
 const Groq: ModelProviderCard = {
   chatModels: [
     {
-      displayName: 'LLaMA3 70B',
+      displayName: 'Llama3.1-8b-Instant',
       enabled: true,
+      functionCall: true,
+      id: 'llama-3.1-8b-instant',
+      tokens: 131_072,
+    },
+    {
+      displayName: 'Llama3.1-70b-versatile',
+      enabled: true,
+      functionCall: true,
+      id: 'llama-3.1-70b-versatile',
+      tokens: 131_072,
+    },
+    {
+      displayName: 'LLaMA3 70B',
       functionCall: true,
       id: 'llama3-70b-8192',
       tokens: 8192,
@@ -32,7 +45,6 @@ const Groq: ModelProviderCard = {
     },
     {
       displayName: 'LLaMA3 8B',
-      enabled: true,
       functionCall: true,
       id: 'llama3-8b-8192',
       tokens: 8192,
@@ -43,7 +55,7 @@ const Groq: ModelProviderCard = {
       tokens: 4096,
     },
   ],
-  checkModel: 'gemma2-9b-it',
+  checkModel: 'llama-3.1-8b-instant',
   id: 'groq',
   name: 'Groq',
   proxyUrl: {
