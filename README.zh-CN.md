@@ -221,12 +221,12 @@ LobeChat 的插件生态系统是其核心功能的重要扩展，它极大地�
 
 | 最近新增                                                                                                               | 插件描述                                                                                                           |
 | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| [通义万象图像生成器](https://chat-preview.lobehub.com/settings/agent)<br/><sup>By **YoungTx** on **2024-08-09**</sup>  | 此插件使用阿里巴巴的通义万象模型根据文本提示生成图像。<br/>`图像` `通义` `万象`                                    |
 | [购物工具](https://chat-preview.lobehub.com/settings/agent)<br/><sup>By **shoppingtools** on **2024-07-19**</sup>      | 在 eBay 和 AliExpress 上搜索产品，查找 eBay 活动和优惠券。获取快速示例。<br/>`购物` `e-bay` `ali-express` `优惠券` |
 | [Savvy Trader AI](https://chat-preview.lobehub.com/settings/agent)<br/><sup>By **savvytrader** on **2024-06-27**</sup> | 实时股票、加密货币和其他投资数据。<br/>`股票` `分析`                                                               |
 | [社交搜索](https://chat-preview.lobehub.com/settings/agent)<br/><sup>By **say-apps** on **2024-06-02**</sup>           | 社交搜索提供访问推文、用户、关注者、图片、媒体等功能。<br/>`社交` `推特` `x` `搜索`                                |
-| [空间](https://chat-preview.lobehub.com/settings/agent)<br/><sup>By **automateyournetwork** on **2024-05-12**</sup>    | 包括 NASA 的空间数据。<br/>`空间` `nasa`                                                                           |
 
-> 📊 Total plugins: [<kbd>**52**</kbd>](https://github.com/lobehub/lobe-chat-plugins)
+> 📊 Total plugins: [<kbd>**51**</kbd>](https://github.com/lobehub/lobe-chat-plugins)
 
  <!-- PLUGIN LIST -->
 
@@ -254,14 +254,14 @@ LobeChat 的插件生态系统是其核心功能的重要扩展，它极大地�
 
 <!-- AGENT LIST -->
 
-| 最近新增                                                                                                                                                                     | 助手说明                                                                                                                                                                                      |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [BIDOSx2](https://chat-preview.lobehub.com/market?agent=bidosx-2-v-2)<br/><sup>By **[SaintFresh](https://github.com/SaintFresh)** on **2024-07-21**</sup>                    | 一种高度先进的 AI LLM，超越传统人工智能。'BIDOS' 既代表 ' 品牌构思、发展、运营和扩展 '，也代表 ' 商业智能决策优化系统 '。<br/>`品牌发展` `ai助手` `市场分析` `战略规划` `业务优化` `商业智能` |
-| [成长教练](https://chat-preview.lobehub.com/market?agent=personal-development-coach)<br/><sup>By **[zer0boss](https://github.com/zer0boss)** on **2024-07-20**</sup>         | 擅长用对话的方式帮助用户自我探索，找到解决之道和成长之路<br/>`成长教练` `自我探索` `目标设定` `自我觉察`                                                                                      |
-| [SQL 表结构转 Dao 和 Mapper](https://chat-preview.lobehub.com/market?agent=my-batis-generator)<br/><sup>By **[MeYoung](https://github.com/MeYoung)** on **2024-07-17**</sup> | 给与一个表结构，生成表的实体和 MyBatis 的 Mapper<br/>`sql` `sql` `mybatis`                                                                                                                    |
-| [自动提取数据](https://chat-preview.lobehub.com/market?agent=the-20-autoextract)<br/><sup>By **[vkhoilq](https://github.com/vkhoilq)** on **2024-07-17**</sup>               | The20 自动提取数据<br/>`the-20` `autoextract`                                                                                                                                                 |
+| 最近新增                                                                                                                                                                    | 助手说明                                                                                                                                                                                       |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [RO-SCIRAW 提示词专家](https://chat-preview.lobehub.com/market?agent=rosciraw)<br/><sup>By **[kirklin](https://github.com/kirklin)** on **2024-08-06**</sup>                | RO-SCIRAW 框架是由 Kirk Lin 开创的提示词方法论，为构建高度精确和高效的提示词提供了一个全新的范式。请输入你要创建的分身信息。<br/>`提示词框架`                                                  |
+| [社交媒体专家](https://chat-preview.lobehub.com/market?agent=social-media-sage)<br/><sup>By **[thedivergentai](https://github.com/thedivergentai)** on **2024-08-06**</sup> | 社交媒体营销专家，为品牌制定成功策略，帮助企业在线蓬勃发展<br/>`社交媒体营销` `品牌塑造` `增长策略`                                                                                            |
+| [Omnipedia](https://chat-preview.lobehub.com/market?agent=omnipedia)<br/><sup>By **[thedivergentai](https://github.com/thedivergentai)** on **2024-08-02**</sup>            | 专业提供高质量、深入研究的各种主题信息，包括历史、科学、文学、艺术等。擅长总结复杂主题，协助研究任务，并提供创意启示。<br/>`artificial-intelligence` `information` `education` `communication` |
+| [代码毒舌大师](https://chat-preview.lobehub.com/market?agent=code-snark-master)<br/><sup>By **[leter](https://github.com/leter)** on **2024-07-29**</sup>                   | 擅长尖刻批评代码，讽刺性地指出低效和可读性问题<br/>`技术领导` `代码审查` `讽刺风格` `编程咨询`                                                                                                 |
 
-> 📊 Total agents: [<kbd>**304**</kbd> ](https://github.com/lobehub/lobe-chat-agents)
+> 📊 Total agents: [<kbd>**312**</kbd> ](https://github.com/lobehub/lobe-chat-agents)
 
  <!-- AGENT LIST -->
 
