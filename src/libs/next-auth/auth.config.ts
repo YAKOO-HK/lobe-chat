@@ -1,5 +1,4 @@
 import type { NextAuthConfig } from 'next-auth';
-import urlJoin from 'url-join';
 
 import { authEnv } from '@/config/auth';
 
@@ -48,8 +47,11 @@ export default {
       return true; // Do different verification for other providers that don't have `email_verified`
     },
   },
+  debug: authEnv.NEXT_AUTH_DEBUG,
+  pages: {
+    error: '/next-auth/error',
+  },
   providers: initSSOProviders(),
-  redirectProxyUrl: process.env.APP_URL ? urlJoin(process.env.APP_URL, '/api/auth') : undefined,
   secret: authEnv.NEXT_AUTH_SECRET,
   trustHost: process.env?.AUTH_TRUST_HOST ? process.env.AUTH_TRUST_HOST === 'true' : true,
 } satisfies NextAuthConfig;

@@ -12,6 +12,7 @@
       "batchChunking": "バッチ分割",
       "chunking": "分割",
       "chunkingTooltip": "ファイルを複数のテキストブロックに分割し、ベクトル化した後、意味検索やファイル対話に使用できます",
+      "chunkingUnsupported": "このファイルはチャンク分割をサポートしていません",
       "confirmDelete": "このファイルを削除しようとしています。削除後は復元できませんので、操作を確認してください",
       "confirmDeleteMultiFiles": "選択した {{count}} 個のファイルを削除しようとしています。削除後は復元できませんので、操作を確認してください",
       "confirmRemoveFromKnowledgeBase": "選択した {{count}} 個のファイルを知識ベースから削除しようとしています。削除後もファイルはすべてのファイルで表示できますので、操作を確認してください",
@@ -67,11 +68,15 @@
   "GoBack": {
     "back": "戻る"
   },
+  "MaxTokenSlider": {
+    "unlimited": "無制限"
+  },
   "ModelSelect": {
     "featureTag": {
       "custom": "カスタムモデル、デフォルトでは関数呼び出しとビジョン認識の両方をサポートしています。上記機能の有効性を確認してください。",
       "file": "このモデルはファイルのアップロードと認識をサポートしています。",
       "functionCall": "このモデルは関数呼び出し（Function Call）をサポートしています。",
+      "reasoning": "このモデルは深い思考をサポートしています",
       "tokens": "このモデルは1つのセッションあたり最大{{tokens}}トークンをサポートしています。",
       "vision": "このモデルはビジョン認識をサポートしています。"
     },
@@ -80,5 +85,10 @@
   "ModelSwitchPanel": {
     "emptyModel": "有効なモデルがありません。設定に移動して有効にしてください。",
     "provider": "プロバイダー"
+  },
+  "Thinking": {
+    "thinking": "深く考えています...",
+    "thought": "深く考えました",
+    "thoughtWithDuration": "深く考えました（所要時間 {{duration}} 秒）"
   }
 }

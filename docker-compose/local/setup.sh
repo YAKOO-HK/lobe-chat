@@ -9,7 +9,7 @@
 # ======================
 
 # 1. Default values of arguments
-# Arg: -f 
+# Arg: -f
 # Determine force download asserts, default is not
 FORCE_DOWNLOAD=false
 
@@ -20,6 +20,10 @@ LANGUAGE="en_US"
 # Arg: --url
 # Determine the source URL to download files
 SOURCE_URL="https://raw.githubusercontent.com/lobehub/lobe-chat/main"
+
+# Arg: --host
+# Determine the server host
+HOST=""
 
 # 2. Parse script arguments
 while getopts "fl:-:" opt; do
@@ -33,13 +37,19 @@ while getopts "fl:-:" opt; do
     -)
       case "${OPTARG}" in
         lang)
-          LANGUAGE="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+          LANGUAGE="${!OPTIND}"
+          OPTIND=$(($OPTIND + 1))
           ;;
         url)
-          SOURCE_URL="${!OPTIND}"; OPTIND=$(( $OPTIND + 1 ))
+          SOURCE_URL="${!OPTIND}"
+          OPTIND=$(($OPTIND + 1))
+          ;;
+        host)
+          HOST="${!OPTIND}"
+          OPTIND=$(($OPTIND + 1))
           ;;
         *)
-          echo "Usage: $0 [-f] [-l language|--lang language] [--url source]" >&2
+          echo "Usage: $0 [-f] [-l language|--lang language] [--url source] [--host serverhost]" >&2
           exit 1
           ;;
       esac
@@ -51,7 +61,6 @@ while getopts "fl:-:" opt; do
   esac
 done
 
-
 # ===============
 # == Variables ==
 # ===============
@@ -60,7 +69,7 @@ SUB_DIR="docker-compose/local"
 FILES=(
   "$SUB_DIR/docker-compose.yml"
   "$SUB_DIR/.env.example"
-  "$SUB_DIR/init_data.json.tar.gz"
+  "$SUB_DIR/init_data.json"
   "$SUB_DIR/s3_data.tar.gz"
 )
 
@@ -121,13 +130,43 @@ show_message() {
           ;;
       esac
       ;;
+    security_secrect_regenerate)
+      case $LANGUAGE in
+        zh_CN)
+          echo "重新生成安全密钥..."
+          ;;
+        *)
+          echo "Regenerate security secrets..."
+          ;;
+      esac
+      ;;
+    security_secrect_regenerate_failed)
+      case $LANGUAGE in
+        zh_CN)
+          echo "无法重新生成安全密钥："
+          ;;
+        *)
+          echo "Failed to regenerate security secrets: "
+          ;;
+      esac
+      ;;
+    security_secrect_regenerate_report)
+      case $LANGUAGE in
+        zh_CN)
+          echo "安全密钥生成结果如下："
+          ;;
+        *)
+          echo "Security secret generation results are as follows:"
+          ;;
+      esac
+      ;;
     tips_run_command)
       case $LANGUAGE in
         zh_CN)
-          echo "您已经完成了所有配置文件的下载。请运行以下命令启动LobeChat："
+          echo "您已经完成了所有配置。请运行以下命令启动LobeChat："
           ;;
         *)
-          echo "You have completed downloading all configuration files. Please run this command to start LobeChat:"
+          echo "You have completed all configurations. Please run this command to start LobeChat:"
           ;;
       esac
       ;;
@@ -154,14 +193,14 @@ show_message() {
     tips_warning)
       case $LANGUAGE in
         zh_CN)
-          echo "警告：不要在生产环境中使用此演示应用程序！！！"
+          echo "警告：如果你正在生产环境中使用，请在日志中检查密钥是否已经生成！！！"
           ;;
         *)
-          echo "Warning: do not use this demo application in production!!!"
+          echo "Warning: If you are using it in a production environment, please check if the keys have been generated in the logs!!!"
           ;;
       esac
       ;;
-    esac
+  esac
 }
 
 # Function to download files
@@ -186,7 +225,7 @@ extract_file() {
     if [ $? -eq 0 ]; then
       echo "$file_name" $(show_message "extracted_success") "$target_dir"
     else
-      echo "$file_name" $(show_message "extracted_failed") 
+      echo "$file_name" $(show_message "extracted_failed")
       exit 1
     fi
   else
@@ -198,45 +237,139 @@ extract_file() {
 # Define colors
 declare -A colors
 colors=(
-    [black]="\e[30m"
-    [red]="\e[31m"
-    [green]="\e[32m"
-    [yellow]="\e[33m"
-    [blue]="\e[34m"
-    [magenta]="\e[35m"
-    [cyan]="\e[36m"
-    [white]="\e[37m"
-    [reset]="\e[0m"
+  [black]="\e[30m"
+  [red]="\e[31m"
+  [green]="\e[32m"
+  [yellow]="\e[33m"
+  [blue]="\e[34m"
+  [magenta]="\e[35m"
+  [cyan]="\e[36m"
+  [white]="\e[37m"
+  [reset]="\e[0m"
 )
 
 print_centered() {
-    local text="$1"  # Get input texts
-    local color="${2:-reset}"  # Get color, default to reset
-    local term_width=$(tput cols)  # Get terminal width
-    local text_length=${#text}  # Get text length
-    local padding=$(( (term_width - text_length) / 2 ))  # Get padding
-    # Check if the color is valid
-    if [[ -z "${colors[$color]}" ]]; then
-        echo "Invalid color specified. Available colors: ${!colors[@]}"
-        return 1
-    fi
-    # Print the text with padding
-    printf "%*s${colors[$color]}%s${colors[reset]}\n" $padding "" "$text"
+  local text="$1"                                   # Get input texts
+  local color="${2:-reset}"                         # Get color, default to reset
+  local term_width=$(tput cols)                     # Get terminal width
+  local text_length=${#text}                        # Get text length
+  local padding=$(((term_width - text_length) / 2)) # Get padding
+  # Check if the color is valid
+  if [[ -z "${colors[$color]}" ]]; then
+    echo "Invalid color specified. Available colors: ${!colors[@]}"
+    return 1
+  fi
+  # Print the text with padding
+  printf "%*s${colors[$color]}%s${colors[reset]}\n" $padding "" "$text"
 }
 
 # Download files asynchronously
 download_file "$SOURCE_URL/${FILES[0]}" "docker-compose.yml"
 download_file "$SOURCE_URL/${FILES[1]}" ".env"
-download_file "$SOURCE_URL/${FILES[2]}" "init_data.json.tar.gz"
+download_file "$SOURCE_URL/${FILES[2]}" "init_data.json"
 download_file "$SOURCE_URL/${FILES[3]}" "s3_data.tar.gz"
 
 # Extract .tar.gz file without output
 extract_file "s3_data.tar.gz" "."
-extract_file "init_data.json.tar.gz" "."
+rm s3_data.tar.gz
 
-# Display final message
+# ==========================
+# === Regenerate Secrets ===
+# ==========================
+
+generate_key() {
+  if [[ -z "$1" ]]; then
+    echo "Usage: generate_key <length>"
+    return 1
+  fi
+  echo $(openssl rand -hex $1 | tr -d '\n' | fold -w $1 | head -n 1)
+}
+
+echo $(show_message "security_secrect_regenerate")
+
+# check operating system
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS
+    SED_COMMAND="sed -i ''"
+else
+    # not macOS
+    SED_COMMAND="sed -i"
+fi
+
+# Generate CASDOOR_SECRET
+CASDOOR_SECRET=$(generate_key 32)
+if [ $? -ne 0 ]; then
+  echo $(show_message "security_secrect_regenerate_failed") "CASDOOR_SECRET"
+else
+  # Search and replace the value of CASDOOR_SECRET in .env
+  $SED_COMMAND "s#^AUTH_CASDOOR_SECRET=.*#AUTH_CASDOOR_SECRET=${CASDOOR_SECRET}#" .env
+  if [ $? -ne 0 ]; then
+    echo $(show_message "security_secrect_regenerate_failed") "AUTH_CASDOOR_SECRET in \`.env\`"
+  fi
+  # replace `clientSecrect` in init_data.json
+  $SED_COMMAND "s#dbf205949d704de81b0b5b3603174e23fbecc354#${CASDOOR_SECRET}#" init_data.json
+  if [ $? -ne 0 ]; then
+    echo $(show_message "security_secrect_regenerate_failed") "AUTH_CASDOOR_SECRET in \`init_data.json\`"
+  fi
+fi
+
+# Generate Casdoor User
+CASDOOR_USER="admin"
+CASDOOR_PASSWORD=$(generate_key 6)
+if [ $? -ne 0 ]; then
+  echo $(show_message "security_secrect_regenerate_failed") "CASDOOR_PASSWORD"
+else
+  # replace `password` in init_data.json
+  $SED_COMMAND "s/"123"/${CASDOOR_PASSWORD}/" init_data.json
+  if [ $? -ne 0 ]; then
+    echo $(show_message "security_secrect_regenerate_failed") "CASDOOR_PASSWORD in \`init_data.json\`"
+  fi
+fi
+
+# Generate Minio S3 access key
+# Temporarily disable key gen for minio because 
+# minio can not start with a access key in envs
+#S3_SECRET_ACCESS_KEY=$(generate_key 32)
+#if [ $? -ne 0 ]; then
+#  echo $(show_message "security_secrect_regenerate_failed") "S3_SECRET_ACCESS_KEY"
+#else
+#  # Search and replace the value of S3_SECRET_ACCESS_KEY in .env
+#  $SED_COMMAND "s#^S3_SECRET_ACCESS_KEY=.*#S3_SECRET_ACCESS_KEY=${S3_SECRET_ACCESS_KEY}#" .env
+#  if [ $? -ne 0 ]; then
+#    echo $(show_message "security_secrect_regenerate_failed") "S3_SECRET_ACCESS_KEY in \`.env\`"
+#  fi
+#fi
+
+# Modify the .env file if the host is specified
+if [ -n "$HOST" ]; then
+  # Modify env
+  $SED_COMMAND "s/localhost/$HOST/g" .env
+  if [ $? -ne 0 ]; then
+    echo $(show_message "security_secrect_regenerate_failed") "HOST in \`.env\`"
+  fi
+  # Modify casdoor init data
+  $SED_COMMAND "s/localhost/$HOST/g" init_data.json
+  if [ $? -ne 0 ]; then
+    echo $(show_message "security_secrect_regenerate_failed") "HOST in \`init_data.json\`"
+  fi
+fi
+
+# Display configuration reports
+
+echo $(show_message "security_secrect_regenerate_report")
+
+if [ -n "$HOST" ]; then
+  echo -e "Server Host: $HOST"
+fi
+echo -e "Casdoor: \n - Username: admin\n  - Password: ${CASDOOR_PASSWORD}\n  - Client Secret: ${CASDOOR_SECRET}"
+
+# ===========================
+# == Display final message ==
+# ===========================
+
 printf "\n%s\n\n" "$(show_message "tips_run_command")"
 print_centered "docker compose up -d" "green"
 printf "\n%s" "$(show_message "tips_show_documentation")"
 printf "%s\n" $(show_message "tips_show_documentation_url")
 printf "\n\e[33m%s\e[0m\n" "$(show_message "tips_warning")"
+

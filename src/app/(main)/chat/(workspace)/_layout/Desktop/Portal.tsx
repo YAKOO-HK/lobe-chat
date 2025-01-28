@@ -6,9 +6,13 @@ import { rgba } from 'polished';
 import { PropsWithChildren, memo } from 'react';
 import { Flexbox } from 'react-layout-kit';
 
-import { CHAT_DOCK_TOOL_UI_WIDTH, CHAT_DOCK_WIDTH, MAX_WIDTH } from '@/const/layoutTokens';
+import {
+  CHAT_PORTAL_MAX_WIDTH,
+  CHAT_PORTAL_TOOL_UI_WIDTH,
+  CHAT_PORTAL_WIDTH,
+} from '@/const/layoutTokens';
 import { useChatStore } from '@/store/chat';
-import { chatPortalSelectors } from '@/store/chat/slices/portal/selectors';
+import { chatPortalSelectors, portalThreadSelectors } from '@/store/chat/selectors';
 
 const useStyles = createStyles(({ css, token, isDarkMode }) => ({
   content: css`
@@ -25,23 +29,24 @@ const useStyles = createStyles(({ css, token, isDarkMode }) => ({
   `,
   panel: css`
     overflow: hidden;
-
     height: 100%;
-    margin: 4px;
-
     background: ${isDarkMode ? rgba(token.colorBgElevated, 0.8) : token.colorBgElevated};
-    border-radius: 8px;
+  `,
+
+  thread: css`
+    background: ${token.colorBgLayout};
   `,
 }));
 
 const PortalPanel = memo(({ children }: PropsWithChildren) => {
-  const { styles } = useStyles();
+  const { styles, cx } = useStyles();
   const { md = true } = useResponsive();
 
-  const [showInspector, showToolUI, showArtifactUI] = useChatStore((s) => [
+  const [showInspector, showToolUI, showArtifactUI, showThread] = useChatStore((s) => [
     chatPortalSelectors.showPortal(s),
     chatPortalSelectors.showPluginUI(s),
     chatPortalSelectors.showArtifactUI(s),
+    portalThreadSelectors.showThread(s),
   ]);
 
   return (
@@ -53,8 +58,10 @@ const PortalPanel = memo(({ children }: PropsWithChildren) => {
         }}
         expand
         hanlderStyle={{ display: 'none' }}
-        maxWidth={MAX_WIDTH}
-        minWidth={showArtifactUI || showToolUI ? CHAT_DOCK_TOOL_UI_WIDTH : CHAT_DOCK_WIDTH}
+        maxWidth={CHAT_PORTAL_MAX_WIDTH}
+        minWidth={
+          showArtifactUI || showToolUI || showThread ? CHAT_PORTAL_TOOL_UI_WIDTH : CHAT_PORTAL_WIDTH
+        }
         mode={md ? 'fixed' : 'float'}
         placement={'right'}
         showHandlerWhenUnexpand={false}
@@ -65,10 +72,10 @@ const PortalPanel = memo(({ children }: PropsWithChildren) => {
             flex: 'none',
             height: '100%',
             maxHeight: '100vh',
-            minWidth: CHAT_DOCK_WIDTH,
+            minWidth: CHAT_PORTAL_WIDTH,
           }}
         >
-          <Flexbox className={styles.panel}>{children}</Flexbox>
+          <Flexbox className={cx(styles.panel, showThread && styles.thread)}>{children}</Flexbox>
         </DraggablePanelContainer>
       </DraggablePanel>
     )

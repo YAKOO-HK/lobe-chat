@@ -12,6 +12,7 @@
       "batchChunking": "批量分块",
       "chunking": "分块",
       "chunkingTooltip": "将文件拆分为多个文本块并向量化后，可用于语义检索和文件对话",
+      "chunkingUnsupported": "该文件不支持分块",
       "confirmDelete": "即将删除该文件，删除后该将无法找回，请确认你的操作",
       "confirmDeleteMultiFiles": "即将删除选中的 {{count}} 个文件，删除后该将无法找回，请确认你的操作",
       "confirmRemoveFromKnowledgeBase": "即将从知识库中移除选中的 {{count}} 个文件，移除后文件仍然可以在全部文件中查看，请确认你的操作",
@@ -67,11 +68,15 @@
   "GoBack": {
     "back": "返回"
   },
+  "MaxTokenSlider": {
+    "unlimited": "无限制"
+  },
   "ModelSelect": {
     "featureTag": {
       "custom": "自定义模型，默认设定同时支持函数调用与视觉识别，请根据实际情况验证上述能力的可用性",
       "file": "该模型支持上传文件读取与识别",
       "functionCall": "该模型支持函数调用（Function Call）",
+      "reasoning": "该模型支持深度思考",
       "tokens": "该模型单个会话最多支持 {{tokens}} Tokens",
       "vision": "该模型支持视觉识别"
     },
@@ -80,5 +85,10 @@
   "ModelSwitchPanel": {
     "emptyModel": "没有启用的模型，请前往设置开启",
     "provider": "提供商"
+  },
+  "Thinking": {
+    "thinking": "深度思考中...",
+    "thought": "已深度思考",
+    "thoughtWithDuration": "已深度思考（用时 {{duration}} 秒）"
   }
 }

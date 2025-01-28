@@ -1,10 +1,11 @@
 'use client';
 
-import { ChatHeader } from '@lobehub/ui';
+import { ChatHeader } from '@lobehub/ui/chat';
 import Link from 'next/link';
 import { memo } from 'react';
 
 import { ProductLogo } from '@/components/Branding';
+import { isCustomBranding } from '@/const/version';
 
 import CreateButton from '../../features/CreateButton';
 import StoreSearchBar from '../../features/StoreSearchBar';
@@ -17,7 +18,7 @@ const Header = memo(() => {
           <ProductLogo extra={'Discover'} size={36} type={'text'} />
         </Link>
       }
-      right={<CreateButton />}
+      right={!isCustomBranding && <CreateButton />}
       style={{
         position: 'relative',
         zIndex: 10,

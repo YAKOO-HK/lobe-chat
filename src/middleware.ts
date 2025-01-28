@@ -9,11 +9,15 @@ import { OAUTH_AUTHORIZED } from './const/auth';
 export const config = {
   matcher: [
     // include any files in the api or trpc folders that might have an extension
-    '/(api|trpc)(.*)',
+    '/(api|trpc|webapi)(.*)',
     // include the /
     '/',
+    '/discover',
+    '/discover(.*)',
+    '/chat',
     '/chat(.*)',
     '/settings(.*)',
+    '/files',
     '/files(.*)',
     '/repos(.*)',
     // ↓ cloud ↓
@@ -54,8 +58,8 @@ const isProtectedRoute = createRouteMatcher([
 
 export default authEnv.NEXT_PUBLIC_ENABLE_CLERK_AUTH
   ? clerkMiddleware(
-      (auth, req) => {
-        if (isProtectedRoute(req)) auth().protect();
+      async (auth, req) => {
+        if (isProtectedRoute(req)) await auth.protect();
       },
       {
         // https://github.com/lobehub/lobe-chat/pull/3084

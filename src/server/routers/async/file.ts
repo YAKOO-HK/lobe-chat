@@ -3,16 +3,18 @@ import { chunk } from 'lodash-es';
 import pMap from 'p-map';
 import { z } from 'zod';
 
-import { initAgentRuntimeWithUserPayload } from '@/app/api/chat/agentRuntime';
+import { serverDBEnv } from '@/config/db';
 import { fileEnv } from '@/config/file';
-import { DEFAULT_EMBEDDING_MODEL } from '@/const/settings';
+import { DEFAULT_FILE_EMBEDDING_MODEL_ITEM } from '@/const/settings/knowledge';
+import { NewChunkItem, NewEmbeddingsItem } from '@/database/schemas';
+import { serverDB } from '@/database/server';
 import { ASYNC_TASK_TIMEOUT, AsyncTaskModel } from '@/database/server/models/asyncTask';
 import { ChunkModel } from '@/database/server/models/chunk';
 import { EmbeddingModel } from '@/database/server/models/embedding';
 import { FileModel } from '@/database/server/models/file';
-import { NewChunkItem, NewEmbeddingsItem } from '@/database/server/schemas/lobechat';
-import { ModelProvider } from '@/libs/agent-runtime';
 import { asyncAuthedProcedure, asyncRouter as router } from '@/libs/trpc/async';
+import { getServerDefaultFilesConfig } from '@/server/globalConfig';
+import { initAgentRuntimeWithUserPayload } from '@/server/modules/AgentRuntime';
 import { S3 } from '@/server/modules/S3';
 import { ChunkService } from '@/server/services/chunk';
 import {
@@ -28,11 +30,11 @@ const fileProcedure = asyncAuthedProcedure.use(async (opts) => {
 
   return opts.next({
     ctx: {
-      asyncTaskModel: new AsyncTaskModel(ctx.userId),
-      chunkModel: new ChunkModel(ctx.userId),
+      asyncTaskModel: new AsyncTaskModel(serverDB, ctx.userId),
+      chunkModel: new ChunkModel(serverDB, ctx.userId),
       chunkService: new ChunkService(ctx.userId),
-      embeddingModel: new EmbeddingModel(ctx.userId),
-      fileModel: new FileModel(ctx.userId),
+      embeddingModel: new EmbeddingModel(serverDB, ctx.userId),
+      fileModel: new FileModel(serverDB, ctx.userId),
     },
   });
 });
@@ -42,7 +44,6 @@ export const fileRouter = router({
     .input(
       z.object({
         fileId: z.string(),
-        model: z.string().default(DEFAULT_EMBEDDING_MODEL),
         taskId: z.string(),
       }),
     )
@@ -54,6 +55,9 @@ export const fileRouter = router({
       }
 
       const asyncTask = await ctx.asyncTaskModel.findById(input.taskId);
+
+      const { model, provider } =
+        getServerDefaultFilesConfig().embeddingModel || DEFAULT_FILE_EMBEDDING_MODEL_ITEM;
 
       if (!asyncTask) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Async Task not found' });
 
@@ -82,13 +86,12 @@ export const fileRouter = router({
 
           const chunks = await ctx.chunkModel.getChunksTextByFileId(input.fileId);
           const requestArray = chunk(chunks, CHUNK_SIZE);
-
           try {
             await pMap(
               requestArray,
               async (chunks, index) => {
                 const agentRuntime = await initAgentRuntimeWithUserPayload(
-                  ModelProvider.OpenAI,
+                  provider,
                   ctx.jwtPayload,
                 );
 
@@ -96,20 +99,19 @@ export const fileRouter = router({
                 console.log(`执行第 ${number} 个任务`);
 
                 console.time(`任务[${number}]: embeddings`);
-
                 const embeddings = await agentRuntime.embeddings({
                   dimensions: 1024,
                   input: chunks.map((c) => c.text),
-                  model: input.model,
+                  model,
                 });
                 console.timeEnd(`任务[${number}]: embeddings`);
 
                 const items: NewEmbeddingsItem[] =
-                  embeddings?.map((e) => ({
-                    chunkId: chunks[e.index].id,
-                    embeddings: e.embedding,
+                  embeddings?.map((e, idx) => ({
+                    chunkId: chunks[idx].id,
+                    embeddings: e,
                     fileId: input.fileId,
-                    model: input.model,
+                    model,
                   })) || [];
 
                 console.time(`任务[${number}]: insert db`);
@@ -174,7 +176,7 @@ export const fileRouter = router({
         console.error(e);
         // if file not found, delete it from db
         if ((e as any).Code === 'NoSuchKey') {
-          await ctx.fileModel.delete(input.fileId);
+          await ctx.fileModel.delete(input.fileId, serverDBEnv.REMOVE_GLOBAL_FILE);
           throw new TRPCError({ code: 'BAD_REQUEST', message: 'File not found' });
         }
       }

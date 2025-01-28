@@ -12,6 +12,7 @@
       "batchChunking": "Batch-Zerteilung",
       "chunking": "Zerteilung",
       "chunkingTooltip": "Teilen Sie die Datei in mehrere Textblöcke und vektorisieren Sie sie, um sie für die semantische Suche und Dateidialoge zu verwenden.",
+      "chunkingUnsupported": "Diese Datei unterstützt kein Chunking.",
       "confirmDelete": "Die Datei wird gelöscht. Nach dem Löschen kann sie nicht wiederhergestellt werden. Bitte bestätigen Sie Ihre Aktion.",
       "confirmDeleteMultiFiles": "Die ausgewählten {{count}} Dateien werden gelöscht. Nach dem Löschen können sie nicht wiederhergestellt werden. Bitte bestätigen Sie Ihre Aktion.",
       "confirmRemoveFromKnowledgeBase": "Die ausgewählten {{count}} Dateien werden aus der Wissensdatenbank entfernt. Die Dateien sind weiterhin in allen Dateien sichtbar. Bitte bestätigen Sie Ihre Aktion.",
@@ -67,11 +68,15 @@
   "GoBack": {
     "back": "Zurück"
   },
+  "MaxTokenSlider": {
+    "unlimited": "Unbegrenzt"
+  },
   "ModelSelect": {
     "featureTag": {
       "custom": "Benutzerdefiniertes Modell, standardmäßig unterstützt es sowohl Funktionsaufrufe als auch visuelle Erkennung. Bitte überprüfen Sie die Verfügbarkeit dieser Fähigkeiten basierend auf den tatsächlichen Gegebenheiten.",
       "file": "Dieses Modell unterstützt das Hochladen von Dateien und deren Erkennung.",
       "functionCall": "Dieses Modell unterstützt Funktionsaufrufe.",
+      "reasoning": "Dieses Modell unterstützt tiefes Denken",
       "tokens": "Dieses Modell unterstützt maximal {{tokens}} Tokens pro Sitzung.",
       "vision": "Dieses Modell unterstützt die visuelle Erkennung."
     },
@@ -80,5 +85,10 @@
   "ModelSwitchPanel": {
     "emptyModel": "Kein aktiviertes Modell. Bitte gehen Sie zu den Einstellungen, um es zu aktivieren.",
     "provider": "Anbieter"
+  },
+  "Thinking": {
+    "thinking": "Tiefes Nachdenken...",
+    "thought": "Tief nachgedacht",
+    "thoughtWithDuration": "Tief nachgedacht (Dauer: {{duration}} Sekunden)"
   }
 }

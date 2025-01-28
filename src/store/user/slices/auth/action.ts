@@ -14,7 +14,6 @@ export interface UserAuthAction {
    * universal login method
    */
   openLogin: () => Promise<void>;
-  openUserProfile: () => Promise<void>;
 }
 
 export const createAuthSlice: StateCreator<
@@ -41,7 +40,12 @@ export const createAuthSlice: StateCreator<
   },
   openLogin: async () => {
     if (enableClerk) {
-      get().clerkSignIn?.({ fallbackRedirectUrl: location.toString() });
+      const reditectUrl = location.toString();
+      get().clerkSignIn?.({
+        fallbackRedirectUrl: reditectUrl,
+        signUpForceRedirectUrl: reditectUrl,
+        signUpUrl: '/signup',
+      });
 
       return;
     }
@@ -56,14 +60,6 @@ export const createAuthSlice: StateCreator<
         return;
       }
       signIn();
-    }
-  },
-
-  openUserProfile: async () => {
-    if (enableClerk) {
-      get().clerkOpenUserProfile?.();
-
-      return;
     }
   },
 });

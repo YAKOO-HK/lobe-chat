@@ -12,6 +12,7 @@
       "batchChunking": "Suddivisione in batch",
       "chunking": "Suddivisione",
       "chunkingTooltip": "Dividi il file in più blocchi di testo e vettorizzali, utilizzabili per la ricerca semantica e il dialogo sui file",
+      "chunkingUnsupported": "Questo file non supporta il frazionamento",
       "confirmDelete": "Stai per eliminare questo file. Una volta eliminato, non sarà possibile recuperarlo. Ti preghiamo di confermare l'operazione.",
       "confirmDeleteMultiFiles": "Stai per eliminare i {{count}} file selezionati. Una volta eliminati, non sarà possibile recuperarli. Ti preghiamo di confermare l'operazione.",
       "confirmRemoveFromKnowledgeBase": "Stai per rimuovere i {{count}} file selezionati dalla base di conoscenza. I file rimarranno visibili in tutti i file. Ti preghiamo di confermare l'operazione.",
@@ -67,11 +68,15 @@
   "GoBack": {
     "back": "Indietro"
   },
+  "MaxTokenSlider": {
+    "unlimited": "Illimitato"
+  },
   "ModelSelect": {
     "featureTag": {
       "custom": "Modello personalizzato: di default supporta sia la chiamata di funzioni che il riconoscimento visivo. Verifica l'effettiva disponibilità di tali funzionalità.",
       "file": "Questo modello supporta il caricamento e il riconoscimento di file.",
       "functionCall": "Questo modello supporta la chiamata di funzioni.",
+      "reasoning": "Questo modello supporta un pensiero profondo",
       "tokens": "Questo modello supporta un massimo di {{tokens}} token per sessione.",
       "vision": "Questo modello supporta il riconoscimento visivo."
     },
@@ -80,5 +85,10 @@
   "ModelSwitchPanel": {
     "emptyModel": "Nessun modello attivo. Vai alle impostazioni per attivarne uno.",
     "provider": "Provider"
+  },
+  "Thinking": {
+    "thinking": "Pensando profondamente...",
+    "thought": "Pensato profondamente",
+    "thoughtWithDuration": "Pensato profondamente (tempo impiegato {{duration}} secondi)"
   }
 }

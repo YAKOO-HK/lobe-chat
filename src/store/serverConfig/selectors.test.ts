@@ -19,7 +19,9 @@ describe('featureFlagsSelectors', () => {
     expect(result).toEqual({
       enableWebrtc: false,
       isAgentEditable: false,
+      enablePlugins: true,
       showCreateSession: true,
+      showChangelog: true,
       enableRAGEval: false,
       showDalle: true,
       enableKnowledgeBase: true,
@@ -32,7 +34,9 @@ describe('featureFlagsSelectors', () => {
       enableCheckUpdates: true,
       showWelcomeSuggest: true,
       enableClerkSignUp: true,
+      showProvider: true,
       showMarket: true,
+      showPinList: false,
       enableSTT: true,
     });
   });

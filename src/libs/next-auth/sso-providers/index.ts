@@ -8,6 +8,8 @@ import GenericOIDC from './generic-oidc';
 import Github from './github';
 import Google from './google';
 import Logto from './logto';
+import MicrosoftEntraID from './microsoft-entra-id';
+import WeChat from './wechat';
 import Zitadel from './zitadel';
 
 export const ssoProviders = [
@@ -22,4 +24,6 @@ export const ssoProviders = [
   Logto,
   CloudflareZeroTrust,
   Casdoor,
+  MicrosoftEntraID,
+  WeChat,
 ];
